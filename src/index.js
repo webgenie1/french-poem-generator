@@ -1,7 +1,7 @@
 function generatePoem(event) {
   event.preventDefault();
 
-  alert("Generating poem");
+  /*alert("Generating poem"); */
 
   /*let poemElement = document.querySelector("#poem");*/
   new Typewriter("#poem", {
