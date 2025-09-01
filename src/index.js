@@ -34,10 +34,14 @@ Do not include the Title. Sign the poem with 'SheCodes Ai' and put it inside a <
 `;
 
   let apiURL = `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
+  let poemElement = document.querySelector("#poem");
+  poemElement.classList.remove("hidden");
+  poemElement.innerHTML = `<span class="generating">⌛</span> Generating the French poem about ${instructionsInput.value}`;
 
   console.log("Generating Poem");
   console.log(`prompt is ${prompt}`);
   console.log(`context is ${context}`);
+
   axios.get(apiURL).then(displayPoem);
 
   /* poemElement.innerHTML = "La tombe dit a la rose"; */
