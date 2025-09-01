@@ -4,12 +4,15 @@ function displayPoem(response) {
   let poemText = response.data.answer;
   console.log("Raw poem response:", poemText);
 
-  // 🧼 Remove markdown-style ```html or ``` at the beginning
-  poemText = poemText.replace(/^```html\s*/i, ""); // remove ```html
-  poemText = poemText.replace(/^```\s*/i, ""); // fallback: remove just ``` if needed
+  // CLEAN ALL CODE BLOCK FENCES
+  poemText = poemText
+    .replace(/^```html\s*/i, "") // remove ```html at top
+    .replace(/^```/, "") // remove ``` at top if no html
+    .replace(/```$/, "") // remove ``` at the end if AI closes the block
+    .trim(); // remove extra newlines or spaces
 
   new Typewriter("#poem", {
-    strings: response.data.answer,
+    strings: poemText,
     autoStart: true,
     delay: 1,
     cursor: "",
@@ -24,8 +27,12 @@ function generatePoem(event) {
   let apiKey = "3df610c9ad6a624314debbt001a9fod7";
   let prompt = `Generate a french poem about ${instructionsInput.value}`;
 
-  let context =
-    "You are a romantic poem expert and love to write short poems. Your mission is to generate a 4 line poem in basic html and seperate each line with a <br />. Make sure to follow the user instructions. Do not include the Title. Sign the poem with 'SheCodes Ai' and put it inside a <strong> element at the end of the poem and NOT at the beginning ";
+  let context = `You are a romantic poem expert and love to write short poems. Your mission is to generate a 4-line French poem. 
+Use <br /> between each line. Do NOT use backticks, markdown, or wrap the result in code blocks. 
+Only output the poem, and separate each line with a <br />. Make sure to follow the user instructions. 
+Do not include the Title. Sign the poem with 'SheCodes Ai' and put it inside a <strong> element at the end of the poem and NOT at the beginning.
+`;
+
   let apiURL = `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
 
   console.log("Generating Poem");
